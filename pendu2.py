@@ -2,8 +2,8 @@ import pygame
 import os
 import random
 
-def pendu():
-    global faux
+def difficile():
+    global afficher_x, faux
     
     pygame.init()
     pygame.mixer.init()
@@ -26,7 +26,7 @@ def pendu():
     pygame.mixer.music.set_volume(3) 
     pygame.mixer.music.play(1)
 
-    with open("crocro.txt") as fichier_txt:
+    with open("mots.txt") as fichier_txt:
         mots = fichier_txt.read().splitlines()
 
     font = pygame.font.Font(None, 36)  
@@ -51,6 +51,10 @@ def pendu():
         text = font.render(' '.join(mot_affiche), True, (255, 255, 255))
         win.blit(text, (20, 20))
 
+        if afficher_x:
+            text_x = font.render("x", True, (255, 0, 0))
+            win.blit(text_x, (win_width//2 -30 , win_height // 2 +210))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -74,14 +78,9 @@ def pendu():
 
         texte_fausses = font.render("Lettres fausses: {}".format(" | ".join(lettres_fausses)), True, (0, 0, 0))
         win.blit(texte_fausses, (300, 90))
-        # vrai ou faux 
+
         if faux > 3 or all(lettre in lettres_fausses for lettre in mot_a_trouver):
-            texte_resultat = font.render("Dommage tu as perdu !", True, (255, 255, 255))
-            win.blit(texte_resultat, (300, 130))
-            texte_mot_trouve = font.render("Le mot était: {}".format(mot_a_trouver), True, (0, 0, 0))
-            win.blit(texte_mot_trouve, (300, 170))
-        if ''.join(mot_affiche) == mot: 
-            texte_resultat = font.render("Bravo tu as gagné !", True, (255, 255, 255))
+            texte_resultat = font.render("Dommage tu as perdu !" if faux > 3 else "Bravo tu as gagné !", True, (255, 255, 255))
             win.blit(texte_resultat, (300, 130))
             texte_mot_trouve = font.render("Le mot était: {}".format(mot_a_trouver), True, (0, 0, 0))
             win.blit(texte_mot_trouve, (300, 170))
@@ -92,4 +91,3 @@ def pendu():
         pygame.display.update()
 
     pygame.quit()
-    return True

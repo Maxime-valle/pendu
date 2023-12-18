@@ -2,7 +2,7 @@ import pygame
 import os
 import cv2
 import pygame_gui
-from pendu import pendu
+from niveau import niveau_pendu
 
 pygame.init()
 
@@ -15,7 +15,7 @@ gestionnaire = pygame_gui.UIManager((largeur_fenetre, hauteur_fenetre))
 
 # Bouton
 bouton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((largeur_fenetre // 2 - 80, hauteur_fenetre // 2 - 205), (150, 50)),
-                                      text='Aller à pendu',
+                                      text='Choisir Niveau',
                                       manager=gestionnaire)
 
 # fond ecran opencv
@@ -25,6 +25,7 @@ cap = cv2.VideoCapture(chemin_video)
 # Variables 
 en_cours = True
 aller_a_pendu = False
+aller_a_niveau = False
 
 # Bande son
 pygame.mixer.music.load("img87/music menu.mp3")
@@ -43,7 +44,8 @@ while en_cours:
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == bouton:
-                    aller_a_pendu = True
+                    aller_a_niveau = True
+                    niveau_pendu()
                     en_cours = False  # Sortir de la boucle while
 
     gestionnaire.update(delta_temps)
@@ -52,7 +54,7 @@ while en_cours:
         # Frame de la vidéo avec OpenCV
         ret, frame = cap.read()
         if not ret:
-            # Si la vidéo est terminée, revenir au début
+          # revenir au début
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             continue
 
@@ -70,8 +72,6 @@ while en_cours:
         gestionnaire.draw_ui(fenetre)
         pygame.display.update()
 
-if aller_a_pendu:
-    pendu()
 
 #  les ressources
 cap.release()
