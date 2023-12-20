@@ -2,7 +2,7 @@ import pygame
 import os
 import random
 import subprocess
-from brouillon import difficile
+from pendu2 import difficile
 from pendu import pendu
 
 def niveau_pendu():
